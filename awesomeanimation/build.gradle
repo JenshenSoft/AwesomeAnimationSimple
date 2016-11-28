@@ -9,7 +9,7 @@ def test = rootProject.ext.testingLibraries;
 
 def siteUrl = 'https://github.com/JenshenSoft/AwesomeAnimationSimple'
 def gitUrl = 'https://github.com/JenshenSoft/AwesomeAnimationSimple.git'
-def libDesc = 'CardsLayout android library'
+def libDesc = 'AwesomeAnimation library'
 
 group = "ua.jenshensoft"
 version = "0.5"
@@ -112,6 +112,10 @@ task findConventions << {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile "com.android.support:support-annotations:${libs.supportVersion}"
 
     //testing
     testCompile "junit:junit:${test.junit}"
