@@ -9,7 +9,7 @@ def test = rootProject.ext.testingLibraries;
 
 def siteUrl = 'https://github.com/JenshenSoft/AwesomeAnimationSimple'
 def gitUrl = 'https://github.com/JenshenSoft/AwesomeAnimationSimple.git'
-def libDesc = 'AwesomeAnimation library'
+def libDesc = 'This library provides a simple class for building animation based on "Object animator"'
 
 group = "ua.jenshensoft"
 version = "0.5"
