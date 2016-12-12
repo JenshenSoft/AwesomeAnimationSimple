@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.TypeEvaluator;
+import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringDef;
@@ -220,7 +221,7 @@ public class AwesomeAnimation {
             return this;
         }
 
-        public Builder setRotation(float... rotation) {
+        public Builder setRotation(@FloatRange(from = 0.0F, to = 360.0F) float... rotation) {
             objectAnimations.add(new AnimationParams.Builder(View.ROTATION, rotation).build());
             return this;
         }
