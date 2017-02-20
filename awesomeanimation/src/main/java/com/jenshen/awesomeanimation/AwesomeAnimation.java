@@ -170,7 +170,7 @@ public class AwesomeAnimation {
 
         public Builder(@NonNull View view) {
             this.view = view;
-            objectAnimations = new ArrayList<>();
+            this.objectAnimations = new ArrayList<>();
         }
 
         public Builder setX(@CoordinationMode String mode, float... x) {
@@ -178,7 +178,7 @@ public class AwesomeAnimation {
                 objectAnimations.add(new AnimationParams.Builder(View.X, x).build());
             } else if (mode.equals(TRANSITION)) {
                 addTranslation(x, view.getTranslationX());
-                x = deleteZeroFromArray(x);
+                //x = deleteZeroFromArray(x);
                 objectAnimations.add(new AnimationParams.Builder(View.TRANSLATION_X, x).build());
             } else {
                 throw new RuntimeException("Can't support this mode");
@@ -191,7 +191,7 @@ public class AwesomeAnimation {
                 objectAnimations.add(new AnimationParams.Builder(View.Y, y).build());
             } else if (mode.equals(TRANSITION)) {
                 addTranslation(y, view.getTranslationY());
-                y = deleteZeroFromArray(y);
+                //y = deleteZeroFromArray(y);
                 objectAnimations.add(new AnimationParams.Builder(View.TRANSLATION_Y, y).build());
             } else {
                 throw new RuntimeException("Can't support this mode");
