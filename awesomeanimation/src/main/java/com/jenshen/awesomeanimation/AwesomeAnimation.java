@@ -25,6 +25,8 @@ import static com.jenshen.awesomeanimation.AwesomeAnimation.SizeMode.SIZE;
 
 public class AwesomeAnimation {
 
+    private static final int DEFAULT_ANIMATION_DURATION = 1000;
+
     private static final Property<View, Float> PROPERTY_WIDTH =
             new Property<View, Float>(Float.class, "viewLayoutWidth") {
 
@@ -60,7 +62,7 @@ public class AwesomeAnimation {
     private List<Animator> animators;
     //animation params
     private Interpolator interpolator;
-    private int duration = 1000;
+    private int duration = DEFAULT_ANIMATION_DURATION;
     private AnimatorSet animatorSet;
 
     private AwesomeAnimation(Builder builder) {
@@ -166,7 +168,7 @@ public class AwesomeAnimation {
         private List<Animator> animators;
         @Nullable
         private Interpolator interpolator;
-        private int duration = 1000;
+        private int duration = DEFAULT_ANIMATION_DURATION;
 
         public Builder(@NonNull View view) {
             this.view = view;
