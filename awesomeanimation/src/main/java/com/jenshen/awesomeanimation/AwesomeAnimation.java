@@ -389,12 +389,14 @@ public class AwesomeAnimation {
                 return this;
             }
 
-            public void setAnimatorListenerAdapter(@Nullable AnimatorListenerAdapter animatorListenerAdapter) {
+            public Builder setAnimatorListenerAdapter(@Nullable AnimatorListenerAdapter animatorListenerAdapter) {
                 this.animatorListenerAdapter = animatorListenerAdapter;
+                return this;
             }
 
-            public void setUpdateListener(@Nullable ValueAnimator.AnimatorUpdateListener updateListener) {
+            public Builder setUpdateListener(@Nullable ValueAnimator.AnimatorUpdateListener updateListener) {
                 this.updateListener = updateListener;
+                return this;
             }
 
             public AnimationParams build() {
