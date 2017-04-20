@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.TypeEvaluator;
+import android.animation.ValueAnimator;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -140,6 +141,12 @@ public class AwesomeAnimation {
         }
         if (params.interpolator != null) {
             animator.setInterpolator(params.interpolator);
+        }
+        if (params.animatorListenerAdapter != null) {
+            animator.addListener(params.animatorListenerAdapter);
+        }
+        if (params.updateListener != null) {
+            animator.addUpdateListener(params.updateListener);
         }
         return animator;
     }
@@ -311,6 +318,10 @@ public class AwesomeAnimation {
         @Nullable
         private TypeEvaluator evaluator;
         @Nullable
+        private AnimatorListenerAdapter animatorListenerAdapter;
+        @Nullable
+        private ValueAnimator.AnimatorUpdateListener updateListener;
+        @Nullable
         private float[] paramsFloat;
         @Nullable
         private int[] paramsInt;
@@ -323,6 +334,8 @@ public class AwesomeAnimation {
             this.evaluator = builder.evaluator;
             this.paramsFloat = builder.paramsFloat;
             this.paramsInt = builder.paramsInt;
+            this.animatorListenerAdapter = builder.animatorListenerAdapter;
+            this.updateListener = builder.updateListener;
         }
 
         public static class Builder {
@@ -341,6 +354,10 @@ public class AwesomeAnimation {
             private Interpolator interpolator;
             @Nullable
             private TypeEvaluator evaluator;
+            @Nullable
+            private AnimatorListenerAdapter animatorListenerAdapter;
+            @Nullable
+            private ValueAnimator.AnimatorUpdateListener updateListener;
 
             public Builder(String attr, @NonNull float... params) {
                 this.attr = attr;
@@ -370,6 +387,14 @@ public class AwesomeAnimation {
             public Builder setEvaluator(@NonNull TypeEvaluator evaluator) {
                 this.evaluator = evaluator;
                 return this;
+            }
+
+            public void setAnimatorListenerAdapter(@Nullable AnimatorListenerAdapter animatorListenerAdapter) {
+                this.animatorListenerAdapter = animatorListenerAdapter;
+            }
+
+            public void setUpdateListener(@Nullable ValueAnimator.AnimatorUpdateListener updateListener) {
+                this.updateListener = updateListener;
             }
 
             public AnimationParams build() {
