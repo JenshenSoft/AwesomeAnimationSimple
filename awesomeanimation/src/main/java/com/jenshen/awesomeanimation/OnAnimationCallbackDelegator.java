@@ -10,8 +10,8 @@ import android.support.annotation.Nullable;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.jenshen.awesomeanimation.OnAnimationCallbackDelegator.AnimationState.CANCEL;
 import static com.jenshen.awesomeanimation.OnAnimationCallbackDelegator.AnimationState.END;
@@ -28,7 +28,7 @@ public class OnAnimationCallbackDelegator extends AnimatorListenerAdapter {
 
     public void addAdapter(@NonNull AnimatorListenerAdapter adapter) {
         if (adapters == null) {
-            adapters = new ArrayList<>();
+            adapters = new CopyOnWriteArrayList<>();
         }
         adapters.add(adapter);
         if (animationState != null) {
@@ -130,7 +130,7 @@ public class OnAnimationCallbackDelegator extends AnimatorListenerAdapter {
 
     private void addState(@AnimationState int state) {
         if (animationState == null) {
-            animationState = new ArrayList<>();
+            animationState = new CopyOnWriteArrayList<>();
         }
         animationState.add(state);
     }
