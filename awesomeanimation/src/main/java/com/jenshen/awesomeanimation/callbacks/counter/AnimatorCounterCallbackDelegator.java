@@ -6,6 +6,9 @@ import android.support.annotation.NonNull;
 
 import com.jenshen.awesomeanimation.callbacks.AnimatorCallbackDelegator;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator {
     private int animationsCount = 0;
     private int countEnd = 0;
@@ -14,6 +17,23 @@ public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator 
     private int countStart = 0;
     private int countPause = 0;
     private int countResume = 0;
+    private List<Animator> animators;
+
+    public void addAnimator(@NonNull Animator animator) {
+        animationsCount++;
+        if (animators == null) {
+            animators = new CopyOnWriteArrayList<>();
+            animator.addListener(this);
+        }
+    }
+
+    public void removeAnimator(@NonNull Animator animator) {
+        animationsCount--;
+        if (animators != null) {
+            animator.removeListener(this);
+            animators.remove(animator);
+        }
+    }
 
     @Override
     public void addListener(@NonNull AnimatorListenerAdapter adapter) {

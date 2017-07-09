@@ -7,6 +7,9 @@ import android.transition.Transition;
 
 import com.jenshen.awesomeanimation.TransitionCallbackDelegator;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class TransitionCounterCallbackDelegator extends TransitionCallbackDelegator {
     private int animationsCount = 0;
@@ -15,17 +18,22 @@ public class TransitionCounterCallbackDelegator extends TransitionCallbackDelega
     private int countStart = 0;
     private int countPause = 0;
     private int countResume = 0;
+    private List<Transition> transitions;
 
-    @Override
-    public void addListener(@NonNull  Transition.TransitionListener adapter) {
+    public void addTransition(@NonNull Transition transition) {
         animationsCount++;
-        super.addListener(adapter);
+        if (transitions == null) {
+            transitions = new CopyOnWriteArrayList<>();
+            transition.addListener(this);
+        }
     }
 
-    @Override
-    public void removeListener(@NonNull  Transition.TransitionListener adapter) {
+    public void removeTransition(@NonNull Transition transition) {
         animationsCount--;
-        super.removeListener(adapter);
+        if (transitions != null) {
+            transition.removeListener(this);
+            transitions.remove(transition);
+        }
     }
 
     @Override
