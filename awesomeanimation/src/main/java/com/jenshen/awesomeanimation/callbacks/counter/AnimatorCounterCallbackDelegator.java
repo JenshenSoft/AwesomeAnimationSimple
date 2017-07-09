@@ -23,14 +23,15 @@ public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator 
         animationsCount++;
         if (animators == null) {
             animators = new CopyOnWriteArrayList<>();
-            animator.addListener(this);
         }
+        animators.add(animator);
+        animator.addListener(this);
     }
 
     public void removeAnimator(@NonNull Animator animator) {
         animationsCount--;
+        animator.removeListener(this);
         if (animators != null) {
-            animator.removeListener(this);
             animators.remove(animator);
         }
     }

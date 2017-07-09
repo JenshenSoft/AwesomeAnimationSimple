@@ -24,14 +24,15 @@ public class TransitionCounterCallbackDelegator extends TransitionCallbackDelega
         animationsCount++;
         if (transitions == null) {
             transitions = new CopyOnWriteArrayList<>();
-            transition.addListener(this);
         }
+        transitions.add(transition);
+        transition.addListener(this);
     }
 
     public void removeTransition(@NonNull Transition transition) {
         animationsCount--;
+        transition.removeListener(this);
         if (transitions != null) {
-            transition.removeListener(this);
             transitions.remove(transition);
         }
     }
