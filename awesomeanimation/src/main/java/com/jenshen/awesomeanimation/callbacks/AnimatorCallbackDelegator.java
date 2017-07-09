@@ -1,32 +1,29 @@
-package com.jenshen.awesomeanimation;
+package com.jenshen.awesomeanimation.callbacks;
 
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.os.Build;
-import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.jenshen.awesomeanimation.OnAnimationCallbackDelegator.AnimationState.CANCEL;
-import static com.jenshen.awesomeanimation.OnAnimationCallbackDelegator.AnimationState.END;
-import static com.jenshen.awesomeanimation.OnAnimationCallbackDelegator.AnimationState.PAUSE;
-import static com.jenshen.awesomeanimation.OnAnimationCallbackDelegator.AnimationState.REPEAT;
-import static com.jenshen.awesomeanimation.OnAnimationCallbackDelegator.AnimationState.RESUME;
-import static com.jenshen.awesomeanimation.OnAnimationCallbackDelegator.AnimationState.START;
+import static com.jenshen.awesomeanimation.callbacks.AnimationState.CANCEL;
+import static com.jenshen.awesomeanimation.callbacks.AnimationState.END;
+import static com.jenshen.awesomeanimation.callbacks.AnimationState.PAUSE;
+import static com.jenshen.awesomeanimation.callbacks.AnimationState.REPEAT;
+import static com.jenshen.awesomeanimation.callbacks.AnimationState.RESUME;
+import static com.jenshen.awesomeanimation.callbacks.AnimationState.START;
 
-public class OnAnimationCallbackDelegator extends AnimatorListenerAdapter {
+public class AnimatorCallbackDelegator extends AnimatorListenerAdapter {
 
     @Nullable
     private List<AnimatorListenerAdapter> adapters;
     private List<Integer> animationState;
 
-    public void addAdapter(@NonNull AnimatorListenerAdapter adapter) {
+    public void addListener(@NonNull AnimatorListenerAdapter adapter) {
         if (adapters == null) {
             adapters = new CopyOnWriteArrayList<>();
         }
@@ -61,7 +58,7 @@ public class OnAnimationCallbackDelegator extends AnimatorListenerAdapter {
         }
     }
 
-    public void removeAdapter(@NonNull AnimatorListenerAdapter adapter) {
+    public void removeListener(@NonNull AnimatorListenerAdapter adapter) {
         if (adapters == null) {
             return;
         }
@@ -133,16 +130,5 @@ public class OnAnimationCallbackDelegator extends AnimatorListenerAdapter {
             animationState = new CopyOnWriteArrayList<>();
         }
         animationState.add(state);
-    }
-
-    @IntDef({START, END, CANCEL, REPEAT, PAUSE, RESUME})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface AnimationState {
-        int START = 1; // 0000 0001
-        int END = 2; // 0000 0010
-        int CANCEL = 4; // 0000 0100
-        int REPEAT = 8; // 0000 1000
-        int PAUSE = 16; // 0001 0000
-        int RESUME = 32; // 0010 0000;
     }
 }
