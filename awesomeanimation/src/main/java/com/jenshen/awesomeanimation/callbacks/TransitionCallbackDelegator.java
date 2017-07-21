@@ -1,4 +1,4 @@
-package com.jenshen.awesomeanimation;
+package com.jenshen.awesomeanimation.callbacks;
 
 
 import android.os.Build;
@@ -6,8 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.transition.Transition;
-
-import com.jenshen.awesomeanimation.callbacks.AnimationState;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

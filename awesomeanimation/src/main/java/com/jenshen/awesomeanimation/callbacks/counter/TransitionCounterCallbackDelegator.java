@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.transition.Transition;
 
-import com.jenshen.awesomeanimation.TransitionCallbackDelegator;
+import com.jenshen.awesomeanimation.callbacks.TransitionCallbackDelegator;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
