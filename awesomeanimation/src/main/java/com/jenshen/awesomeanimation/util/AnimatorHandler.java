@@ -11,6 +11,7 @@ import java.util.List;
 public class AnimatorHandler {
 
     private List<AnimatorWrapper> animatorList;
+    private boolean onPause;
 
     public void addAnimator(Animator animator) {
         final List<AnimatorWrapper> animators = createListInNeeded();
@@ -23,7 +24,12 @@ public class AnimatorHandler {
         });
     }
 
+    public boolean isOnPause() {
+        return onPause;
+    }
+
     public void onResume() {
+        onPause = false;
         if (this.animatorList != null) {
             for (AnimatorWrapper animator : this.animatorList) {
                 animator.onResume();
@@ -32,6 +38,7 @@ public class AnimatorHandler {
     }
 
     public void onPause() {
+        onPause = true;
         if (this.animatorList != null) {
             for (AnimatorWrapper animator : this.animatorList) {
                 animator.onPause();
