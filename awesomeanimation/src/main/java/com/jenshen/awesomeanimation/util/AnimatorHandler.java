@@ -19,7 +19,13 @@ public class AnimatorHandler {
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                animators.remove(animation);
+                for (AnimatorWrapper animatorWrapper : animators) {
+                    if (animatorWrapper.getAnimator().equals(animation)) {
+                        animatorWrapper.clear();
+                        animators.remove(animatorWrapper);
+                        return;
+                    }
+                }
             }
         });
     }
@@ -71,7 +77,7 @@ public class AnimatorHandler {
             this.animator = animator;
         }
 
-        public void onResume() {
+        void onResume() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 animator.resume();
             } else {
@@ -83,7 +89,7 @@ public class AnimatorHandler {
             }
         }
 
-        public void onPause() {
+        void onPause() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 animator.pause();
             } else {
@@ -96,9 +102,17 @@ public class AnimatorHandler {
             }
         }
 
-        public void cancel() {
+        void cancel() {
             animator.cancel();
+            clear();
+        }
+
+        void clear() {
             animator.removeAllListeners();
+        }
+
+        Animator getAnimator() {
+            return animator;
         }
     }
 }
