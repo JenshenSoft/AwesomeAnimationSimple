@@ -5,8 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.os.Build;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AnimatorHandler {
 
@@ -35,6 +35,9 @@ public class AnimatorHandler {
     }
 
     public void onResume() {
+        if (!onPause) {
+            return;
+        }
         onPause = false;
         if (this.animatorList != null) {
             for (AnimatorWrapper animator : this.animatorList) {
@@ -44,6 +47,9 @@ public class AnimatorHandler {
     }
 
     public void onPause() {
+        if (onPause) {
+            return;
+        }
         onPause = true;
         if (this.animatorList != null) {
             for (AnimatorWrapper animator : this.animatorList) {
@@ -64,7 +70,7 @@ public class AnimatorHandler {
 
     private List<AnimatorWrapper> createListInNeeded() {
         if (this.animatorList == null) {
-            this.animatorList = new ArrayList<>();
+            this.animatorList = new CopyOnWriteArrayList<>();
         }
         return this.animatorList;
     }
