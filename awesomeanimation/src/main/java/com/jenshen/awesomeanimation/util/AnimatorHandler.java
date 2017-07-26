@@ -79,6 +79,10 @@ public class AnimatorHandler {
         }
     }
 
+    public void cancel() {
+        cancel(null);
+    }
+
     public void cancel(@Nullable ViewGroup viewGroup) {
         if (this.animatorList != null) {
             for (AnimatorWrapper animator : animatorList) {
