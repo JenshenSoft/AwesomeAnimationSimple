@@ -1,14 +1,14 @@
-package com.jenshen.awesomeanimation.util;
+package com.jenshen.awesomeanimation.util.animator;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.os.Build;
 
-public class AnimatorWrapper {
+class AnimatorWrapper {
     private final Animator animator;
     private long currentPlayTime;
 
-    public AnimatorWrapper(Animator animator) {
+    AnimatorWrapper(Animator animator) {
         this.animator = animator;
     }
 
