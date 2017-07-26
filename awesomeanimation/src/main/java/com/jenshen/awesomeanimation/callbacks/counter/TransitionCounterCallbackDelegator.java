@@ -21,12 +21,18 @@ public class TransitionCounterCallbackDelegator extends TransitionCallbackDelega
     private List<Transition> transitions;
 
     public void addTransition(@NonNull Transition transition) {
+        addTransition(transition, true);
+    }
+
+    public void addTransition(@NonNull Transition transition, boolean addListener) {
         animationsCount++;
         if (transitions == null) {
             transitions = new CopyOnWriteArrayList<>();
         }
         transitions.add(transition);
-        transition.addListener(this);
+        if (addListener) {
+            transition.addListener(this);
+        }
     }
 
     public void removeTransition(@NonNull Transition transition) {
