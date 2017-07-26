@@ -2,8 +2,13 @@ package com.jenshen.awesomeanimation.util;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.os.Build;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.transition.Transition;
+import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -11,23 +16,39 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class AnimatorHandler {
 
     private List<AnimatorWrapper> animatorList;
+    private List<TransitionWrapper> transitionList;
     private boolean onPause;
 
-    public void addAnimator(Animator animator) {
-        final List<AnimatorWrapper> animators = createListInNeeded();
+    private Transition.TransitionListener transitionListener;
+    private AnimatorListenerAdapter animatorListenerAdapter ;
+
+    public void addAnimator(final Animator animator) {
+        final List<AnimatorWrapper> animators = createListAnimatorsInNeeded();
         animators.add(new AnimatorWrapper(animator));
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                for (AnimatorWrapper animatorWrapper : animators) {
-                    if (animatorWrapper.getAnimator().equals(animation)) {
-                        animatorWrapper.clear();
-                        animators.remove(animatorWrapper);
-                        return;
-                    }
-                }
-            }
-        });
+        animator.addListener(animatorListenerAdapter);
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public void addTransition(Transition transition) {
+        final List<TransitionWrapper> transitions = createListTransitionsInNeeded();
+        transitions.add(new TransitionWrapper(transition));
+        transition.addListener(transitionListener);
+    }
+
+    public void onWindowFocusChanged(boolean hasWindowFocus) {
+        if (hasWindowFocus) {
+            onResume();
+        } else {
+            onPause();
+        }
+    }
+
+    public void onVisibilityChanged(int visibility) {
+        if (visibility == View.VISIBLE) {
+            onResume();
+        } else {
+            onPause();
+        }
     }
 
     public boolean isOnPause() {
@@ -58,7 +79,7 @@ public class AnimatorHandler {
         }
     }
 
-    public void clear() {
+    public void cancel(@Nullable ViewGroup viewGroup) {
         if (this.animatorList != null) {
             for (AnimatorWrapper animator : animatorList) {
                 animator.cancel();
@@ -66,59 +87,91 @@ public class AnimatorHandler {
             this.animatorList.clear();
             this.animatorList = null;
         }
+
+        if (this.transitionList != null) {
+            for (TransitionWrapper transition : transitionList) {
+                transition.cancel(viewGroup, transitionListener);
+            }
+            this.transitionList.clear();
+            this.transitionList = null;
+        }
     }
 
-    private List<AnimatorWrapper> createListInNeeded() {
+    private List<AnimatorWrapper> createListAnimatorsInNeeded() {
         if (this.animatorList == null) {
             this.animatorList = new CopyOnWriteArrayList<>();
+            this.animatorListenerAdapter = new AnimatorListenerAdapter() {
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    removeAnimator(animation);
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    removeAnimator(animation);
+                }
+            };
         }
         return this.animatorList;
     }
 
-    private static class AnimatorWrapper {
-        private final Animator animator;
-        private long currentPlayTime;
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private List<TransitionWrapper> createListTransitionsInNeeded() {
+        if (this.transitionList == null) {
+            this.transitionList = new CopyOnWriteArrayList<>();
+            this.transitionListener = new Transition.TransitionListener() {
+                @Override
+                public void onTransitionStart(Transition transition) {
 
-        private AnimatorWrapper(Animator animator) {
-            this.animator = animator;
-        }
-
-        void onResume() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                animator.resume();
-            } else {
-                if (animator instanceof ValueAnimator) {
-                    ValueAnimator valueAnimator = (ValueAnimator) animator;
-                    currentPlayTime = valueAnimator.getCurrentPlayTime();
                 }
-                animator.cancel();
+
+                @Override
+                public void onTransitionEnd(Transition transition) {
+                    removeTransition(transition);
+                }
+
+                @Override
+                public void onTransitionCancel(Transition transition) {
+                    removeTransition(transition);
+                }
+
+                @Override
+                public void onTransitionPause(Transition transition) {
+
+                }
+
+                @Override
+                public void onTransitionResume(Transition transition) {
+
+                }
+            };
+        }
+        return this.transitionList;
+    }
+
+    private void removeAnimator(Animator animator) {
+        if (animatorList != null) {
+            for (AnimatorWrapper animatorWrapper : animatorList) {
+                if (animatorWrapper.getAnimator().equals(animator)) {
+                    animatorWrapper.clear();
+                    animatorList.remove(animatorWrapper);
+                    return;
+                }
             }
         }
+    }
 
-        void onPause() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                animator.pause();
-            } else {
-                if (animator instanceof ValueAnimator) {
-                    ValueAnimator valueAnimator = (ValueAnimator) animator;
-                    valueAnimator.setCurrentPlayTime(currentPlayTime);
-                    currentPlayTime = 0;
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void removeTransition(Transition transitionToRemove) {
+        if (transitionList != null) {
+            for (TransitionWrapper transition : transitionList) {
+                if (transition.getTransition().equals(transitionToRemove)) {
+                    transition.clear(transitionListener);
+                    transitionList.remove(transition);
+                    return;
                 }
-                animator.start();
             }
-        }
-
-        void cancel() {
-            animator.cancel();
-            clear();
-        }
-
-        void clear() {
-            animator.removeAllListeners();
-        }
-
-        Animator getAnimator() {
-            return animator;
         }
     }
 }
