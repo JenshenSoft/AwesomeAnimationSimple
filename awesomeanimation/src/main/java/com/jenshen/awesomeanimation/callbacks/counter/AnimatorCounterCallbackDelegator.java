@@ -3,6 +3,7 @@ package com.jenshen.awesomeanimation.callbacks.counter;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.jenshen.awesomeanimation.callbacks.AnimatorCallbackDelegator;
 
@@ -10,6 +11,9 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator {
+
+    private static final String TAG = "AwesomeAnimation: " + AnimatorCounterCallbackDelegator.class.getSimpleName();
+
     private int animationsCount = 0;
     private int countEnd = 0;
     private int countCancel = 0;
@@ -50,6 +54,7 @@ public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator 
 
     @Override
     public void onAnimationCancel(Animator animation) {
+        Log.d(TAG, "onAnimationCancel " + countCancel);
         countCancel++;
         if (countCancel == animationsCount) {
             super.onAnimationCancel(animation);
@@ -58,6 +63,7 @@ public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator 
 
     @Override
     public void onAnimationEnd(Animator animation) {
+        Log.d(TAG, "onAnimationEnd " + countEnd);
         countEnd++;
         if (countEnd == animationsCount) {
             super.onAnimationEnd(animation);
@@ -66,6 +72,7 @@ public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator 
 
     @Override
     public void onAnimationRepeat(Animator animation) {
+        Log.d(TAG, "onAnimationRepeat " + countRepeat);
         countRepeat++;
         if (countRepeat == animationsCount) {
             super.onAnimationRepeat(animation);
@@ -74,6 +81,7 @@ public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator 
 
     @Override
     public void onAnimationStart(Animator animation) {
+        Log.d(TAG, "onAnimationStart " + countStart);
         countStart++;
         if (countStart == animationsCount) {
             super.onAnimationStart(animation);
@@ -82,6 +90,7 @@ public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator 
 
     @Override
     public void onAnimationPause(Animator animation) {
+        Log.d(TAG, "onAnimationPause " + countPause);
         countPause++;
         if (countPause == animationsCount) {
             super.onAnimationPause(animation);
@@ -90,6 +99,7 @@ public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator 
 
     @Override
     public void onAnimationResume(Animator animation) {
+        Log.d(TAG, "onAnimationResume " + countResume);
         countResume++;
         if (countResume == animationsCount) {
             super.onAnimationResume(animation);

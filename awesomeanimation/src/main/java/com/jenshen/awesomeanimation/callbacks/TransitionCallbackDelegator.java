@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.transition.Transition;
+import android.util.Log;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -18,6 +19,8 @@ import static com.jenshen.awesomeanimation.callbacks.AnimationState.START;
 
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class TransitionCallbackDelegator implements Transition.TransitionListener {
+
+    private static final String TAG = "AwesomeAnimation: " + TransitionCallbackDelegator.class.getSimpleName();
 
     @Nullable
     private List<Transition.TransitionListener> adapters;
@@ -60,6 +63,7 @@ public class TransitionCallbackDelegator implements Transition.TransitionListene
 
     @Override
     public void onTransitionStart(Transition transition) {
+        Log.d(TAG, "onTransitionStart");
         addState(START);
         if (adapters != null && !adapters.isEmpty()) {
             for (Transition.TransitionListener adapter : adapters) {
@@ -70,6 +74,7 @@ public class TransitionCallbackDelegator implements Transition.TransitionListene
 
     @Override
     public void onTransitionEnd(Transition transition) {
+        Log.d(TAG, "onTransitionEnd");
         addState(END);
         if (adapters != null && !adapters.isEmpty()) {
             for (Transition.TransitionListener adapter : adapters) {
@@ -80,6 +85,7 @@ public class TransitionCallbackDelegator implements Transition.TransitionListene
 
     @Override
     public void onTransitionCancel(Transition transition) {
+        Log.d(TAG, "onTransitionCancel");
         addState(CANCEL);
         if (adapters != null && !adapters.isEmpty()) {
             for (Transition.TransitionListener adapter : adapters) {
@@ -90,6 +96,7 @@ public class TransitionCallbackDelegator implements Transition.TransitionListene
 
     @Override
     public void onTransitionPause(Transition transition) {
+        Log.d(TAG, "onTransitionPause");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && adapters != null && !adapters.isEmpty()) {
             addState(PAUSE);
             for (Transition.TransitionListener adapter : adapters) {
@@ -100,6 +107,7 @@ public class TransitionCallbackDelegator implements Transition.TransitionListene
 
     @Override
     public void onTransitionResume(Transition transition) {
+        Log.d(TAG, "onTransitionResume");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && adapters != null && !adapters.isEmpty()) {
             addState(RESUME);
             for (Transition.TransitionListener adapter : adapters) {

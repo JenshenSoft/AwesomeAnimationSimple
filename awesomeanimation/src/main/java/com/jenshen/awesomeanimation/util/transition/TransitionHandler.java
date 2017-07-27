@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.transition.Transition;
+import android.util.Log;
 import android.view.View;
 
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @TargetApi(Build.VERSION_CODES.KITKAT)
 public class TransitionHandler {
+
+    private static final String TAG = "AwesomeAnimation: " + TransitionHandler.class.getSimpleName();
 
     private List<TransitionWrapper> transitionList;
     private boolean onPause;
@@ -60,8 +63,11 @@ public class TransitionHandler {
             return;
         }
         onPause = false;
-        for (TransitionWrapper transitionWrapper : transitionList) {
-            transitionWrapper.onResume();
+        Log.d(TAG, "onResume");
+        if (transitionList != null) {
+            for (TransitionWrapper transitionWrapper : transitionList) {
+                transitionWrapper.onResume();
+            }
         }
     }
 
@@ -70,12 +76,16 @@ public class TransitionHandler {
             return;
         }
         onPause = true;
-        for (TransitionWrapper transitionWrapper : transitionList) {
-            transitionWrapper.onPause();
+        Log.d(TAG, "onPause");
+        if (transitionList != null) {
+            for (TransitionWrapper transitionWrapper : transitionList) {
+                transitionWrapper.onPause();
+            }
         }
     }
 
     public void cancel() {
+        Log.d(TAG, "cancel");
         if (this.transitionList != null) {
             for (TransitionWrapper transition : transitionList) {
                 transition.cancel(transitionListener);

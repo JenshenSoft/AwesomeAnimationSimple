@@ -6,6 +6,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -18,6 +19,8 @@ import static com.jenshen.awesomeanimation.callbacks.AnimationState.RESUME;
 import static com.jenshen.awesomeanimation.callbacks.AnimationState.START;
 
 public class AnimatorCallbackDelegator extends AnimatorListenerAdapter {
+
+    private static final String TAG = "AwesomeAnimation: " + AnimatorCallbackDelegator.class.getSimpleName();
 
     @Nullable
     private List<AnimatorListenerAdapter> adapters;
@@ -67,6 +70,7 @@ public class AnimatorCallbackDelegator extends AnimatorListenerAdapter {
 
     @Override
     public void onAnimationCancel(Animator animation) {
+        Log.d(TAG, "onAnimationCancel");
         addState(CANCEL);
         if (adapters != null && !adapters.isEmpty()) {
             for (AnimatorListenerAdapter adapter : adapters) {
@@ -77,6 +81,7 @@ public class AnimatorCallbackDelegator extends AnimatorListenerAdapter {
 
     @Override
     public void onAnimationEnd(Animator animation) {
+        Log.d(TAG, "onAnimationEnd");
         addState(END);
         if (adapters != null && !adapters.isEmpty()) {
             for (AnimatorListenerAdapter adapter : adapters) {
@@ -87,6 +92,7 @@ public class AnimatorCallbackDelegator extends AnimatorListenerAdapter {
 
     @Override
     public void onAnimationRepeat(Animator animation) {
+        Log.d(TAG, "onAnimationRepeat");
         addState(REPEAT);
         if (adapters != null && !adapters.isEmpty()) {
             for (AnimatorListenerAdapter adapter : adapters) {
@@ -97,6 +103,7 @@ public class AnimatorCallbackDelegator extends AnimatorListenerAdapter {
 
     @Override
     public void onAnimationStart(Animator animation) {
+        Log.d(TAG, "onAnimationStart");
         addState(START);
         if (adapters != null && !adapters.isEmpty()) {
             for (AnimatorListenerAdapter adapter : adapters) {
@@ -107,6 +114,7 @@ public class AnimatorCallbackDelegator extends AnimatorListenerAdapter {
 
     @Override
     public void onAnimationPause(Animator animation) {
+        Log.d(TAG, "onAnimationPause");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && adapters != null && !adapters.isEmpty()) {
             addState(PAUSE);
             for (AnimatorListenerAdapter adapter : adapters) {
@@ -117,6 +125,7 @@ public class AnimatorCallbackDelegator extends AnimatorListenerAdapter {
 
     @Override
     public void onAnimationResume(Animator animation) {
+        Log.d(TAG, "onAnimationResume");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && adapters != null && !adapters.isEmpty()) {
             addState(RESUME);
             for (AnimatorListenerAdapter adapter : adapters) {

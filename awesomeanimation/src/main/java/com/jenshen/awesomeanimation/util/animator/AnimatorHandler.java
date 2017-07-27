@@ -2,12 +2,15 @@ package com.jenshen.awesomeanimation.util.animator;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.util.Log;
 import android.view.View;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AnimatorHandler {
+
+    private static final String TAG = "AwesomeAnimation: " + AnimatorHandler.class.getSimpleName();
 
     private List<AnimatorWrapper> animatorList;
     private boolean onPause;
@@ -57,6 +60,7 @@ public class AnimatorHandler {
             return;
         }
         onPause = false;
+        Log.d(TAG, "onResume");
         if (this.animatorList != null) {
             for (AnimatorWrapper animator : this.animatorList) {
                 animator.onResume();
@@ -69,6 +73,7 @@ public class AnimatorHandler {
             return;
         }
         onPause = true;
+        Log.d(TAG, "onPause");
         if (this.animatorList != null) {
             for (AnimatorWrapper animator : this.animatorList) {
                 animator.onPause();
@@ -77,6 +82,7 @@ public class AnimatorHandler {
     }
 
     public void cancel() {
+        Log.d(TAG, "cancel");
         if (this.animatorList != null) {
             for (AnimatorWrapper animator : animatorList) {
                 animator.cancel();

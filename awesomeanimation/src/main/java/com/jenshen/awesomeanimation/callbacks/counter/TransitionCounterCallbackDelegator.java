@@ -4,6 +4,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.transition.Transition;
+import android.util.Log;
 
 import com.jenshen.awesomeanimation.callbacks.TransitionCallbackDelegator;
 
@@ -12,6 +13,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class TransitionCounterCallbackDelegator extends TransitionCallbackDelegator {
+
+    private static final String TAG = "AwesomeAnimation: " + TransitionCounterCallbackDelegator.class.getSimpleName();
+
     private int animationsCount = 0;
     private int countEnd = 0;
     private int countCancel = 0;
@@ -45,6 +49,7 @@ public class TransitionCounterCallbackDelegator extends TransitionCallbackDelega
 
     @Override
     public void onTransitionStart(Transition transition) {
+        Log.d(TAG, "onTransitionStart " + countStart);
         countStart++;
         if (countStart == animationsCount) {
             super.onTransitionStart(transition);
@@ -53,6 +58,7 @@ public class TransitionCounterCallbackDelegator extends TransitionCallbackDelega
 
     @Override
     public void onTransitionEnd(Transition transition) {
+        Log.d(TAG, "onTransitionStart " + countEnd);
         countEnd++;
         if (countEnd == animationsCount) {
             super.onTransitionEnd(transition);
@@ -61,6 +67,7 @@ public class TransitionCounterCallbackDelegator extends TransitionCallbackDelega
 
     @Override
     public void onTransitionCancel(Transition transition) {
+        Log.d(TAG, "countCancel " + countEnd);
         countCancel++;
         if (countCancel == animationsCount) {
             super.onTransitionCancel(transition);
@@ -69,6 +76,7 @@ public class TransitionCounterCallbackDelegator extends TransitionCallbackDelega
 
     @Override
     public void onTransitionPause(Transition transition) {
+        Log.d(TAG, "onTransitionPause " + countEnd);
         countPause++;
         if (countPause == animationsCount) {
             super.onTransitionPause(transition);
@@ -77,6 +85,7 @@ public class TransitionCounterCallbackDelegator extends TransitionCallbackDelega
 
     @Override
     public void onTransitionResume(Transition transition) {
+        Log.d(TAG, "onTransitionResume " + countEnd);
         countResume++;
         if (countResume == animationsCount) {
             super.onTransitionResume(transition);
