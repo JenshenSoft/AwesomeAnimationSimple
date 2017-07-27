@@ -40,6 +40,15 @@ public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator 
         }
     }
 
+    public void clear() {
+        if (animators != null) {
+            for (Animator animator : animators) {
+                animator.removeListener(this);
+            }
+            animators.clear();
+        }
+    }
+
     @Override
     public void addListener(@NonNull AnimatorListenerAdapter adapter) {
         animationsCount++;
@@ -59,6 +68,7 @@ public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator 
         if (countCancel == animationsCount) {
             super.onAnimationCancel(animation);
         }
+        removeAnimator(animation);
     }
 
     @Override
@@ -68,6 +78,7 @@ public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator 
         if (countEnd == animationsCount) {
             super.onAnimationEnd(animation);
         }
+        removeAnimator(animation);
     }
 
     @Override

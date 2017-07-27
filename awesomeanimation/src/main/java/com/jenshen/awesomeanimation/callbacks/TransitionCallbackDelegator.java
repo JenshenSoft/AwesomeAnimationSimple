@@ -61,6 +61,12 @@ public class TransitionCallbackDelegator implements Transition.TransitionListene
         adapters.remove(adapter);
     }
 
+    public void clear() {
+        if (adapters != null) {
+            adapters.clear();
+        }
+    }
+
     @Override
     public void onTransitionStart(Transition transition) {
         Log.d(TAG, "onTransitionStart");
@@ -80,6 +86,7 @@ public class TransitionCallbackDelegator implements Transition.TransitionListene
             for (Transition.TransitionListener adapter : adapters) {
                 adapter.onTransitionEnd(transition);
             }
+            clear();
         }
     }
 
@@ -91,6 +98,7 @@ public class TransitionCallbackDelegator implements Transition.TransitionListene
             for (Transition.TransitionListener adapter : adapters) {
                 adapter.onTransitionCancel(transition);
             }
+            clear();
         }
     }
 

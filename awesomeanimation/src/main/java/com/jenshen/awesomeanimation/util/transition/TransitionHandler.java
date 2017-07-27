@@ -104,7 +104,10 @@ public class TransitionHandler {
                 public void onTransitionStart(Transition transition) {
                     if (transitionList != null) {
                         for (TransitionWrapper transitionWrapper : transitionList) {
-                            transitionWrapper.onStart();
+                            if (transitionWrapper.getTransition().equals(transition)) {
+                                transitionWrapper.onStart();
+                                return;
+                            }
                         }
                     }
                 }
@@ -113,10 +116,13 @@ public class TransitionHandler {
                 public void onTransitionEnd(Transition transition) {
                     if (transitionList != null) {
                         for (TransitionWrapper transitionWrapper : transitionList) {
-                            transitionWrapper.onEnd();
+                            if (transitionWrapper.getTransition().equals(transition)) {
+                                transitionWrapper.onEnd();
+                                return;
+                            }
                         }
+                        removeTransition(transition);
                     }
-                    removeTransition(transition);
                 }
 
                 @Override

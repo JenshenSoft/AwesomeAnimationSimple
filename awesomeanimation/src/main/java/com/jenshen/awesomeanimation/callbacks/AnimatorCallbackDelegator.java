@@ -68,6 +68,12 @@ public class AnimatorCallbackDelegator extends AnimatorListenerAdapter {
         adapters.remove(adapter);
     }
 
+    public void clear() {
+        if (adapters != null) {
+            adapters.clear();
+        }
+    }
+
     @Override
     public void onAnimationCancel(Animator animation) {
         Log.d(TAG, "onAnimationCancel");
@@ -76,6 +82,7 @@ public class AnimatorCallbackDelegator extends AnimatorListenerAdapter {
             for (AnimatorListenerAdapter adapter : adapters) {
                 adapter.onAnimationCancel(animation);
             }
+            clear();
         }
     }
 
@@ -87,6 +94,7 @@ public class AnimatorCallbackDelegator extends AnimatorListenerAdapter {
             for (AnimatorListenerAdapter adapter : adapters) {
                 adapter.onAnimationEnd(animation);
             }
+            clear();
         }
     }
 

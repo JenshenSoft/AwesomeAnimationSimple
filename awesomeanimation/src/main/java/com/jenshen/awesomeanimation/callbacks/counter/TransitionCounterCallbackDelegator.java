@@ -47,6 +47,15 @@ public class TransitionCounterCallbackDelegator extends TransitionCallbackDelega
         }
     }
 
+    public void clear() {
+        if (transitions != null) {
+            for (Transition transition : transitions) {
+                transition.removeListener(this);
+            }
+            transitions.clear();
+        }
+    }
+
     @Override
     public void onTransitionStart(Transition transition) {
         Log.d(TAG, "onTransitionStart " + countStart);
@@ -63,6 +72,7 @@ public class TransitionCounterCallbackDelegator extends TransitionCallbackDelega
         if (countEnd == animationsCount) {
             super.onTransitionEnd(transition);
         }
+        removeTransition(transition);
     }
 
     @Override
@@ -72,6 +82,7 @@ public class TransitionCounterCallbackDelegator extends TransitionCallbackDelega
         if (countCancel == animationsCount) {
             super.onTransitionCancel(transition);
         }
+        removeTransition(transition);
     }
 
     @Override
