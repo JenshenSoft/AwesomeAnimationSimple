@@ -7,6 +7,7 @@ import android.transition.Transition;
 import android.util.Log;
 
 import com.jenshen.awesomeanimation.callbacks.TransitionCallbackDelegator;
+import com.jenshen.awesomeanimation.util.transition.TransitionUtil;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -41,10 +42,7 @@ public class TransitionCounterCallbackDelegator extends TransitionCallbackDelega
 
     public void removeTransition(@NonNull Transition transition) {
         animationsCount--;
-        transition.removeListener(this);
-        if (transitions != null) {
-            transitions.remove(transition);
-        }
+        clear(transition);
     }
 
     public void clear() {
@@ -72,7 +70,7 @@ public class TransitionCounterCallbackDelegator extends TransitionCallbackDelega
         if (countEnd == animationsCount) {
             super.onTransitionEnd(transition);
         }
-        removeTransition(transition);
+        clear(transition);
     }
 
     @Override
@@ -82,7 +80,7 @@ public class TransitionCounterCallbackDelegator extends TransitionCallbackDelega
         if (countCancel == animationsCount) {
             super.onTransitionCancel(transition);
         }
-        removeTransition(transition);
+        clear(transition);
     }
 
     @Override
@@ -100,6 +98,18 @@ public class TransitionCounterCallbackDelegator extends TransitionCallbackDelega
         countResume++;
         if (countResume == animationsCount) {
             super.onTransitionResume(transition);
+        }
+    }
+
+    private void clear(Transition transition) {
+        transition.removeListener(this);
+        if (transitions != null) {
+            for (Transition tr : transitions) {
+                if (TransitionUtil.equalsTransitions(transition, tr)) {
+                    tr.removeListener(this);
+                    transitions.remove(tr);
+                }
+            }
         }
     }
 }

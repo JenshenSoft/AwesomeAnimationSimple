@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.jenshen.awesomeanimation.callbacks.AnimatorCallbackDelegator;
+import com.jenshen.awesomeanimation.util.animator.AnimatorUtil;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -34,10 +35,7 @@ public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator 
 
     public void removeAnimator(@NonNull Animator animator) {
         animationsCount--;
-        animator.removeListener(this);
-        if (animators != null) {
-            animators.remove(animator);
-        }
+        clear(animator);
     }
 
     public void clear() {
@@ -68,7 +66,7 @@ public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator 
         if (countCancel == animationsCount) {
             super.onAnimationCancel(animation);
         }
-        removeAnimator(animation);
+        clear(animation);
     }
 
     @Override
@@ -78,7 +76,7 @@ public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator 
         if (countEnd == animationsCount) {
             super.onAnimationEnd(animation);
         }
-        removeAnimator(animation);
+        clear(animation);
     }
 
     @Override
@@ -114,6 +112,18 @@ public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator 
         countResume++;
         if (countResume == animationsCount) {
             super.onAnimationResume(animation);
+        }
+    }
+
+    private void clear(Animator animator) {
+        animator.removeListener(this);
+        if (animators != null) {
+            for (Animator an : animators) {
+                if (AnimatorUtil.equalsAnimators(animator, an)) {
+                    an.removeListener(this);
+                    animators.remove(an);
+                }
+            }
         }
     }
 }
