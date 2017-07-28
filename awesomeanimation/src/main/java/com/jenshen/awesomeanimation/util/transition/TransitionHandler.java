@@ -116,7 +116,7 @@ public class TransitionHandler {
                         for (TransitionWrapper transitionWrapper : transitionList) {
                             if (TransitionUtil.equalsTransitions(transitionWrapper.getTransition(), transition)) {
                                 transitionWrapper.onStart();
-                                return;
+                                break;
                             }
                         }
                     }
@@ -128,7 +128,7 @@ public class TransitionHandler {
                         for (TransitionWrapper transitionWrapper : transitionList) {
                             if (TransitionUtil.equalsTransitions(transitionWrapper.getTransition(), transition)) {
                                 transitionWrapper.onEnd();
-                                return;
+                                break;
                             }
                         }
                         removeTransition(transition);
