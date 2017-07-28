@@ -108,6 +108,7 @@ public class TransitionCounterCallbackDelegator extends TransitionCallbackDelega
                 if (TransitionUtil.equalsTransitions(transition, tr)) {
                     tr.removeListener(this);
                     transitions.remove(tr);
+                    return;
                 }
             }
         }

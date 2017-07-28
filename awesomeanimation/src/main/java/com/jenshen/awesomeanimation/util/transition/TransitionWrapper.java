@@ -8,7 +8,7 @@ import android.transition.Transition;
 
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class TransitionWrapper {
-    private Transition transition;
+    private final Transition transition;
     @Nullable
     private Transition.TransitionListener transitionListener;
 
@@ -57,10 +57,7 @@ public class TransitionWrapper {
     }
 
     void clear(Transition.TransitionListener transitionListener) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            transition.removeListener(transitionListener);
-        }
+        transition.removeListener(transitionListener);
         this.transitionListener = null;
-        this.transition = null;
     }
 }

@@ -122,6 +122,7 @@ public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator 
                 if (AnimatorUtil.equalsAnimators(animator, an)) {
                     an.removeListener(this);
                     animators.remove(an);
+                    return;
                 }
             }
         }
