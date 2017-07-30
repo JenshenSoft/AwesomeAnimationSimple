@@ -17,12 +17,11 @@ public class TransitionHandler {
 
     private List<TransitionWrapper> transitionList;
     private boolean onPause;
-    private boolean onCanceled;
+    private boolean onDestroyed;
 
     private Transition.TransitionListener transitionListener;
 
     public void addTransition(Transition transition, Transition.TransitionListener transitionListener) {
-        onCanceled = false;
         final List<TransitionWrapper> transitions = createListTransitionsInNeeded();
         transitions.add(new TransitionWrapper(transition, transitionListener));
         transition.addListener(this.transitionListener);
@@ -60,8 +59,8 @@ public class TransitionHandler {
         return onPause;
     }
 
-    public boolean isOnCanceled() {
-        return onCanceled;
+    public boolean isOnDestroyed() {
+        return onDestroyed;
     }
 
     public void onResume() {
@@ -90,11 +89,16 @@ public class TransitionHandler {
         }
     }
 
-    public void cancel() {
-        if (onCanceled) {
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy");
+        if (onDestroyed) {
             return;
         }
-        onCanceled = true;
+        onDestroyed = true;
+        cancel();
+    }
+
+    public void cancel() {
         Log.d(TAG, "cancel");
         if (this.transitionList != null) {
             for (TransitionWrapper transition : transitionList) {

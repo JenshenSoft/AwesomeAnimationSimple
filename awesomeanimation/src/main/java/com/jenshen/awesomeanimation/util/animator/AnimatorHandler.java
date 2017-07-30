@@ -14,12 +14,11 @@ public class AnimatorHandler {
 
     private List<AnimatorWrapper> animatorList;
     private boolean onPause;
-    private boolean onCanceled;
+    private boolean onDestroyed;
 
     private AnimatorListenerAdapter animatorListenerAdapter;
 
     public void addAnimator(final Animator animator) {
-        onCanceled = false;
         final List<AnimatorWrapper> animators = createListAnimatorsInNeeded();
         animators.add(new AnimatorWrapper(animator));
         animator.addListener(animatorListenerAdapter);
@@ -53,8 +52,8 @@ public class AnimatorHandler {
         }
     }
 
-    public boolean isOnCanceled() {
-        return onCanceled;
+    public boolean isOnDestroyed() {
+        return onDestroyed;
     }
 
     public boolean isOnPause() {
@@ -87,11 +86,16 @@ public class AnimatorHandler {
         }
     }
 
-    public void cancel() {
-        if (onCanceled) {
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy");
+        if (onDestroyed) {
             return;
         }
-        onCanceled = true;
+        onDestroyed = true;
+        cancel();
+    }
+
+    public void cancel() {
         Log.d(TAG, "cancel");
         if (this.animatorList != null) {
             for (AnimatorWrapper animator : animatorList) {
