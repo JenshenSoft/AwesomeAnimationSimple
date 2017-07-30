@@ -25,12 +25,18 @@ public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator 
     private List<Animator> animators;
 
     public void addAnimator(@NonNull Animator animator) {
+        addAnimator(animator, true);
+    }
+
+    public void addAnimator(@NonNull Animator animator, boolean addListener) {
         animationsCount++;
         if (animators == null) {
             animators = new CopyOnWriteArrayList<>();
         }
         animators.add(animator);
-        animator.addListener(this);
+        if (addListener) {
+            animator.addListener(this);
+        }
     }
 
     public void removeAnimator(@NonNull Animator animator) {
