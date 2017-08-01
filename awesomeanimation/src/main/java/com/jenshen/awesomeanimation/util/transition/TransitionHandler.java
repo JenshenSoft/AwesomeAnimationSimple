@@ -107,6 +107,7 @@ public class TransitionHandler {
             this.transitionList.clear();
             this.transitionList = null;
         }
+        this.transitionListener = null;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

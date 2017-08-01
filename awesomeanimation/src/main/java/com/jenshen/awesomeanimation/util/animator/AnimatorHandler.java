@@ -104,6 +104,7 @@ public class AnimatorHandler {
             this.animatorList.clear();
             this.animatorList = null;
         }
+        this.animatorListenerAdapter = null;
     }
 
     private List<AnimatorWrapper> createListAnimatorsInNeeded() {
