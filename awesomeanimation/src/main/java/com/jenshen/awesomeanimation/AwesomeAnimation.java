@@ -137,7 +137,7 @@ public class AwesomeAnimation {
             throw new RuntimeException("Can't support this animation params");
         }
 
-        if (params.repeatCount != -1) {
+        if (params.repeatCount != 0) {
             animator.setRepeatCount(params.repeatCount);
         }
         if (params.evaluator != null) {
@@ -180,7 +180,7 @@ public class AwesomeAnimation {
         @Nullable
         private Interpolator interpolator;
         private int duration = DEFAULT_ANIMATION_DURATION;
-        private int repeatCount = -1;
+        private int repeatCount;
 
         public Builder(@NonNull View view) {
             this.view = view;
@@ -284,7 +284,7 @@ public class AwesomeAnimation {
         }
 
         public AwesomeAnimation build() {
-            if (repeatCount != -1) {
+            if (repeatCount != 0) {
                 for (AnimationParams objectAnimation : objectAnimations) {
                     objectAnimation.repeatCount = repeatCount;
                 }
@@ -324,7 +324,7 @@ public class AwesomeAnimation {
 
     public static class AnimationParams {
         private String attr;
-        private int repeatCount = -1;
+        private int repeatCount;
         @Nullable
         private Property<View, Float> propertyFloat;
         @Nullable
@@ -357,7 +357,7 @@ public class AwesomeAnimation {
 
         public static class Builder {
             private String attr;
-            private int repeatCount = -1;
+            private int repeatCount;
             @Nullable
             private Property<View, Float> propertyFloat;
             @Nullable
