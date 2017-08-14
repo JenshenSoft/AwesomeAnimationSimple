@@ -136,6 +136,10 @@ public class AwesomeAnimation {
         if (animator == null) {
             throw new RuntimeException("Can't support this animation params");
         }
+
+        if (params.repeatCount != -1) {
+            animator.setRepeatCount(params.repeatCount);
+        }
         if (params.evaluator != null) {
             animator.setEvaluator(params.evaluator);
         }
@@ -176,6 +180,7 @@ public class AwesomeAnimation {
         @Nullable
         private Interpolator interpolator;
         private int duration = DEFAULT_ANIMATION_DURATION;
+        private int repeatCount = -1;
 
         public Builder(@NonNull View view) {
             this.view = view;
@@ -240,6 +245,11 @@ public class AwesomeAnimation {
             return this;
         }
 
+        public Builder setRepeatCount(int repeatCount) {
+            this.repeatCount = repeatCount;
+            return this;
+        }
+
         public Builder addObjectAnimation(AnimationParams animationParams) {
             objectAnimations.add(animationParams);
             return this;
@@ -274,6 +284,11 @@ public class AwesomeAnimation {
         }
 
         public AwesomeAnimation build() {
+            if (repeatCount != -1) {
+                for (AnimationParams objectAnimation : objectAnimations) {
+                    objectAnimation.repeatCount = repeatCount;
+                }
+            }
             return new AwesomeAnimation(this);
         }
 
@@ -308,7 +323,8 @@ public class AwesomeAnimation {
     }
 
     public static class AnimationParams {
-        public String attr;
+        private String attr;
+        private int repeatCount = -1;
         @Nullable
         private Property<View, Float> propertyFloat;
         @Nullable
@@ -328,6 +344,7 @@ public class AwesomeAnimation {
 
         private AnimationParams(Builder builder) {
             this.attr = builder.attr;
+            this.repeatCount = builder.repeatCount;
             this.propertyFloat = builder.propertyFloat;
             this.propertyInt = builder.propertyInt;
             this.interpolator = builder.interpolator;
@@ -339,7 +356,8 @@ public class AwesomeAnimation {
         }
 
         public static class Builder {
-            public String attr;
+            private String attr;
+            private int repeatCount = -1;
             @Nullable
             private Property<View, Float> propertyFloat;
             @Nullable
@@ -377,6 +395,11 @@ public class AwesomeAnimation {
             public Builder(@NonNull Property<View, Integer> property, @NonNull int... params) {
                 this.propertyInt = property;
                 this.paramsInt = params;
+            }
+
+            public Builder setRepeatCount(int repeatCount) {
+                this.repeatCount = repeatCount;
+                return this;
             }
 
             public Builder setInterpolator(@NonNull Interpolator interpolator) {
