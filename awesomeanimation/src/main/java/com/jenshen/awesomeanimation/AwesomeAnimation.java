@@ -6,7 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
-import android.support.annotation.FloatRange;
+import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringDef;
@@ -24,9 +24,25 @@ import static com.jenshen.awesomeanimation.AwesomeAnimation.CoordinationMode.TRA
 import static com.jenshen.awesomeanimation.AwesomeAnimation.SizeMode.SCALE;
 import static com.jenshen.awesomeanimation.AwesomeAnimation.SizeMode.SIZE;
 
+@SuppressWarnings("unused")
 public class AwesomeAnimation {
 
     private static final int DEFAULT_ANIMATION_DURATION = 1000;
+
+    private static final Property<View, Float> PROPERTY_PADDING =
+            new Property<View, Float>(Float.class, "padding") {
+
+                @Override
+                public void set(View object, Float value) {
+                    object.getLayoutParams().width = value.intValue();
+                    object.requestLayout();
+                }
+
+                @Override
+                public Float get(View object) {
+                    return (float) object.getLayoutParams().width;
+                }
+            };
 
     private static final Property<View, Float> PROPERTY_WIDTH =
             new Property<View, Float>(Float.class, "viewLayoutWidth") {
@@ -42,6 +58,7 @@ public class AwesomeAnimation {
                     return (float) object.getLayoutParams().width;
                 }
             };
+
     private static final Property<View, Float> PROPERTY_HEIGHT =
             new Property<View, Float>(Float.class, "viewLayoutHeight") {
 
@@ -56,6 +73,7 @@ public class AwesomeAnimation {
                     return (float) object.getLayoutParams().height;
                 }
             };
+
     private View view;
     @NonNull
     private List<AnimationParams> objectAnimations;
@@ -155,18 +173,27 @@ public class AwesomeAnimation {
         return animator;
     }
 
-    @StringDef({SCALE, SIZE})
+    @StringDef({SizeMode.SCALE, SizeMode.SIZE})
     @Retention(RetentionPolicy.SOURCE)
     public @interface SizeMode {
         String SCALE = "scale";
         String SIZE = "size";
     }
 
-    @StringDef({TRANSITION, COORDINATES})
+    @StringDef({CoordinationMode.TRANSITION, CoordinationMode.COORDINATES})
     @Retention(RetentionPolicy.SOURCE)
     public @interface CoordinationMode {
         String TRANSITION = "transition";
         String COORDINATES = "coordinates";
+    }
+
+    @IntDef(value = {DirectionMode.LEFT, DirectionMode.RIGHT, DirectionMode.TOP, DirectionMode.BOTTOM}, flag = true)
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface DirectionMode {
+        int LEFT = 1;
+        int RIGHT = 2;
+        int TOP = 4;
+        int BOTTOM = 8;
     }
 
     public static class Builder {
@@ -191,8 +218,6 @@ public class AwesomeAnimation {
             if (mode.equals(COORDINATES)) {
                 objectAnimations.add(new AnimationParams.Builder(View.X, x).build());
             } else if (mode.equals(TRANSITION)) {
-                addTranslation(x, view.getTranslationX());
-                //x = deleteZeroFromArray(x);
                 objectAnimations.add(new AnimationParams.Builder(View.TRANSLATION_X, x).build());
             } else {
                 throw new RuntimeException("Can't support this mode");
@@ -204,8 +229,6 @@ public class AwesomeAnimation {
             if (mode.equals(COORDINATES)) {
                 objectAnimations.add(new AnimationParams.Builder(View.Y, y).build());
             } else if (mode.equals(TRANSITION)) {
-                addTranslation(y, view.getTranslationY());
-                //y = deleteZeroFromArray(y);
                 objectAnimations.add(new AnimationParams.Builder(View.TRANSLATION_Y, y).build());
             } else {
                 throw new RuntimeException("Can't support this mode");
@@ -235,7 +258,64 @@ public class AwesomeAnimation {
             return this;
         }
 
-        public Builder setRotation(@FloatRange(from = 0.0F, to = 360.0F) float... rotation) {
+        public Builder setPadding(@DirectionMode final int direction, int... padding) {
+            int from;
+            switch (direction) {
+                case DirectionMode.LEFT:
+                    from = view.getPaddingLeft();
+                    break;
+                case DirectionMode.TOP:
+                    from = view.getPaddingTop();
+                    break;
+                case DirectionMode.RIGHT:
+                    from = view.getPaddingRight();
+                    break;
+                case DirectionMode.BOTTOM:
+                    from = view.getPaddingBottom();
+                    break;
+                default:
+                    from = 0;
+            }
+            int[] values = new int[padding.length + 1];
+            values[0] = from;
+            System.arraycopy(padding, 0, values, 1, padding.length);
+            ValueAnimator animator = ValueAnimator.ofInt(values);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @SuppressWarnings("PointlessBitwiseExpression")
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    Integer animatedValue = (Integer) valueAnimator.getAnimatedValue();
+                    int left;
+                    if ((direction | DirectionMode.LEFT) == direction) {
+                        left = animatedValue;
+                    } else {
+                        left = view.getPaddingLeft();
+                    }
+                    int right;
+                    if ((direction | DirectionMode.RIGHT) == direction) {
+                        right = animatedValue;
+                    } else {
+                        right = view.getPaddingRight();
+                    }
+                    int top;
+                    if ((direction | DirectionMode.TOP) == direction) {
+                        top = animatedValue;
+                    } else {
+                        top = view.getPaddingTop();
+                    }
+                    int bottom;
+                    if ((direction | DirectionMode.BOTTOM) == direction) {
+                        bottom = animatedValue;
+                    } else {
+                        bottom = view.getPaddingBottom();
+                    }
+                    view.setPadding(left, top, right, bottom);
+                }
+            });
+            return addAnimator(animator);
+        }
+
+        public Builder setRotation(float... rotation) {
             objectAnimations.add(new AnimationParams.Builder(View.ROTATION, rotation).build());
             return this;
         }
