@@ -2,6 +2,7 @@ package com.jenshen.awesomeanimation.util.transition;
 
 import android.annotation.TargetApi;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.transition.Transition;
 import android.util.Log;
@@ -21,17 +22,23 @@ public class TransitionHandler {
 
     private Transition.TransitionListener transitionListener;
 
-    public void addTransition(Transition transition, Transition.TransitionListener transitionListener) {
+    public void addTransition(Transition transition,
+                              boolean withProtection,
+                              @Nullable Transition.TransitionListener... transitionListeners) {
         final List<TransitionWrapper> transitions = createListTransitionsInNeeded();
-        transitions.add(new TransitionWrapper(transition, transitionListener));
         transition.addListener(this.transitionListener);
+        transitions.add(new TransitionWrapper(transition, withProtection ? this.transitionListener : null, transitionListeners));
+    }
+
+    public void addTransition(Transition transition, @Nullable Transition.TransitionListener... transitionListeners) {
+        addTransition(transition, true, transitionListeners);
     }
 
     public void removeTransition(Transition transitionToRemove) {
         if (transitionList != null) {
             for (TransitionWrapper transitionWrapper : transitionList) {
                 if (TransitionUtil.equalsTransitions(transitionWrapper.getTransition(), transitionToRemove)) {
-                    transitionWrapper.clear(transitionListener);
+                    transitionWrapper.clear();
                     transitionList.remove(transitionWrapper);
                     return;
                 }
@@ -102,7 +109,7 @@ public class TransitionHandler {
         Log.d(TAG, "cancel");
         if (this.transitionList != null) {
             for (TransitionWrapper transition : transitionList) {
-                transition.cancel(transitionListener);
+                transition.cancel();
             }
             this.transitionList.clear();
             this.transitionList = null;
