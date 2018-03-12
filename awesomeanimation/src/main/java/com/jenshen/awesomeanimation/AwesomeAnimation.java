@@ -74,6 +74,7 @@ public class AwesomeAnimation {
                 }
             };
 
+    @Nullable
     private View view;
     @NonNull
     private List<AnimationParams> objectAnimations;
@@ -81,7 +82,8 @@ public class AwesomeAnimation {
     private List<Animator> animators;
     //animation params
     private Interpolator interpolator;
-    private int duration = DEFAULT_ANIMATION_DURATION;
+    private int duration;
+    private int delay;
     private AnimatorSet animatorSet;
 
     private AwesomeAnimation(Builder builder) {
@@ -90,10 +92,18 @@ public class AwesomeAnimation {
         animators = builder.animators;
         interpolator = builder.interpolator;
         duration = builder.duration;
-        animatorSet = createAnimationSet();
+        duration = builder.delay;
     }
 
     public void start() {
+        if (view == null) {
+            throw new RuntimeException("Please, set a view for animation");
+        }
+        start(view);
+    }
+
+    public void start(View view) {
+        animatorSet = createAnimationSet(view);
         animatorSet.start();
     }
 
@@ -101,39 +111,39 @@ public class AwesomeAnimation {
         return animatorSet;
     }
 
-    private AnimatorSet createAnimationSet() {
-        List<Animator> animators = new ArrayList<>();
-        view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+    private AnimatorSet createAnimationSet(final View v) {
+        List<Animator> animatorList = new ArrayList<>();
+        v.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
         if (!objectAnimations.isEmpty())
             for (AnimationParams customAnimation : objectAnimations) {
-                animators.add(createAnimation(view, customAnimation));
+                animatorList.add(createAnimation(v, customAnimation));
             }
 
-        if (this.animators != null)
-            for (Animator animator : this.animators) {
-                animators.add(animator);
-            }
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(animators);
-        if (interpolator != null) {
-            animatorSet.setInterpolator(interpolator);
+        if (this.animators != null) {
+            animatorList.addAll(this.animators);
         }
-        animatorSet.setDuration(duration);
-        animatorSet.addListener(new AnimatorListenerAdapter() {
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(animatorList);
+        if (interpolator != null) {
+            set.setInterpolator(interpolator);
+        }
+        set.setDuration(duration);
+        set.setStartDelay(delay);
+        set.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationCancel(Animator animation) {
                 super.onAnimationCancel(animation);
-                view.setLayerType(View.LAYER_TYPE_NONE, null);
+                v.setLayerType(View.LAYER_TYPE_NONE, null);
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                view.setLayerType(View.LAYER_TYPE_NONE, null);
+                v.setLayerType(View.LAYER_TYPE_NONE, null);
             }
         });
-        return animatorSet;
+        return set;
     }
 
     private ObjectAnimator createAnimation(View view, AnimationParams params) {
@@ -191,14 +201,14 @@ public class AwesomeAnimation {
     @Retention(RetentionPolicy.SOURCE)
     public @interface DirectionMode {
         int LEFT = 1;
-        int RIGHT = 2;
-        int TOP = 4;
-        int BOTTOM = 8;
+        int RIGHT = 1 << 1;
+        int TOP = 1 << 2;
+        int BOTTOM = 1 << 3;
     }
 
     public static class Builder {
 
-        @NonNull
+        @Nullable
         private View view;
         @NonNull
         private List<AnimationParams> objectAnimations;
@@ -207,9 +217,14 @@ public class AwesomeAnimation {
         @Nullable
         private Interpolator interpolator;
         private int duration = DEFAULT_ANIMATION_DURATION;
+        private int delay;
         private int repeatCount;
 
-        public Builder(@NonNull View view) {
+        public Builder() {
+            this(null);
+        }
+
+        public Builder(@Nullable View view) {
             this.view = view;
             this.objectAnimations = new ArrayList<>();
         }
@@ -360,6 +375,11 @@ public class AwesomeAnimation {
 
         public Builder setDuration(int duration) {
             this.duration = duration;
+            return this;
+        }
+
+        public Builder setStartDelay(int delay) {
+            this.delay = delay;
             return this;
         }
 
