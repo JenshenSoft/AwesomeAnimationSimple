@@ -103,11 +103,16 @@ public class AwesomeAnimation {
     }
 
     public void start(View view) {
-        animatorSet = createAnimationSet(view);
+        if (animatorSet == null) {
+            animatorSet = createAnimationSet(view);
+        }
         animatorSet.start();
     }
 
     public AnimatorSet getAnimatorSet() {
+        if (animatorSet == null) {
+            animatorSet = createAnimationSet(view);
+        }
         return animatorSet;
     }
 
