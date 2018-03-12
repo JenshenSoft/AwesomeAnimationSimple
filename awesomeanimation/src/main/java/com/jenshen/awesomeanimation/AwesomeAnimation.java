@@ -84,7 +84,6 @@ public class AwesomeAnimation {
     private Interpolator interpolator;
     private int duration;
     private int delay;
-    private AnimatorSet animatorSet;
 
     private AwesomeAnimation(Builder builder) {
         view = builder.view;
@@ -96,24 +95,31 @@ public class AwesomeAnimation {
     }
 
     public void start() {
-        if (view == null) {
+        if (this.view == null) {
             throw new RuntimeException("Please, set a view for animation");
         }
-        start(view);
+        start(this.view);
     }
 
-    public void start(View view) {
-        if (animatorSet == null) {
-            animatorSet = createAnimationSet(view);
+    public void start(View v) {
+        if (this.view != null) {
+            throw new RuntimeException("You already have a view");
         }
-        animatorSet.start();
+        getAnimatorSet(v).start();
     }
 
     public AnimatorSet getAnimatorSet() {
-        if (animatorSet == null) {
-            animatorSet = createAnimationSet(view);
+        if (this.view == null) {
+            throw new RuntimeException("Please, set a view for animation");
         }
-        return animatorSet;
+        return getAnimatorSet(this.view);
+    }
+
+    public AnimatorSet getAnimatorSet(View v) {
+        if (this.view != null) {
+            throw new RuntimeException("You already have a view");
+        }
+        return createAnimationSet(v);
     }
 
     private AnimatorSet createAnimationSet(final View v) {

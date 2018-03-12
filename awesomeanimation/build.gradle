@@ -12,7 +12,7 @@ def gitUrl = 'https://github.com/JenshenSoft/AwesomeAnimationSimple.git'
 def libDesc = 'This library provides a simple class for building animation based on "Object animator"'
 
 group = "ua.jenshensoft"
-version = "0.997"
+version = "0.998"
 
 android {
     compileSdkVersion cfg.compileSdkVersion
