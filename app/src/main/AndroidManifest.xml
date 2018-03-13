@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jenshen.awesomeanimation">
+    package="com.jenshen.awesomeanimation.app">
 
     <application
         android:allowBackup="true"

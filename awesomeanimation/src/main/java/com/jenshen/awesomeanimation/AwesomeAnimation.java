@@ -91,34 +91,42 @@ public class AwesomeAnimation {
         animators = builder.animators;
         interpolator = builder.interpolator;
         duration = builder.duration;
-        duration = builder.delay;
+        delay = builder.delay;
     }
 
     public void start() {
         if (this.view == null) {
             throw new RuntimeException("Please, set a view for animation");
         }
-        start(this.view);
+        onStart(this.view);
     }
 
     public void start(View v) {
         if (this.view != null) {
             throw new RuntimeException("You already have a view");
         }
-        getAnimatorSet(v).start();
+        onStart(v);
     }
 
     public AnimatorSet getAnimatorSet() {
         if (this.view == null) {
             throw new RuntimeException("Please, set a view for animation");
         }
-        return getAnimatorSet(this.view);
+        return onCreateAnimationSet(this.view);
     }
 
     public AnimatorSet getAnimatorSet(View v) {
         if (this.view != null) {
             throw new RuntimeException("You already have a view");
         }
+        return onCreateAnimationSet(v);
+    }
+
+    private void onStart(View v) {
+        createAnimationSet(v).start();
+    }
+
+    private AnimatorSet onCreateAnimationSet(View v) {
         return createAnimationSet(v);
     }
 
