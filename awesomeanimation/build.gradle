@@ -4,15 +4,15 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 def cfg = rootProject.ext.configuration
-def libs = rootProject.ext.libraries;
-def test = rootProject.ext.testingLibraries;
+def libs = rootProject.ext.libraries
+def test = rootProject.ext.testingLibraries
 
 def siteUrl = 'https://github.com/JenshenSoft/AwesomeAnimationSimple'
 def gitUrl = 'https://github.com/JenshenSoft/AwesomeAnimationSimple.git'
 def libDesc = 'This library provides a simple class for building animation based on "Object animator"'
 
 group = "ua.jenshensoft"
-version = "1.0.1"
+version = "1.0.2"
 
 android {
 
@@ -118,7 +118,7 @@ task findConventions << {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "com.android.support:support-annotations:${libs.supportVersion}"
+    compileOnly "com.android.support:support-annotations:${libs.supportVersion}"
 
     //testing
     testImplementation "junit:junit:${test.junit}"
