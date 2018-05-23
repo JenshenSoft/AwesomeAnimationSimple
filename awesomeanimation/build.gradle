@@ -12,7 +12,7 @@ def gitUrl = 'https://github.com/JenshenSoft/AwesomeAnimationSimple.git'
 def libDesc = 'This library provides a simple class for building animation based on "Object animator"'
 
 group = "ua.jenshensoft"
-version = "0.999"
+version = "1.0.0"
 
 android {
     compileSdkVersion cfg.compileSdkVersion
@@ -111,12 +111,12 @@ task findConventions << {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile "com.android.support:support-annotations:${libs.supportVersion}"
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:support-annotations:${libs.supportVersion}"
 
     //testing
-    testCompile "junit:junit:${test.junit}"
+    testImplementation "junit:junit:${test.junit}"
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
 }
