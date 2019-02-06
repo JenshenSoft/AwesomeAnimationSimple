@@ -88,7 +88,7 @@ public class AnimatorCallbackDelegator extends AnimatorListenerAdapter {
 
     @Override
     public void onAnimationEnd(Animator animation) {
-        Log.d(TAG, "onAnimationEnd");
+        Log.d(TAG, "onAnimationsEnd");
         addState(END);
         if (adapters != null && !adapters.isEmpty()) {
             for (AnimatorListenerAdapter adapter : adapters) {

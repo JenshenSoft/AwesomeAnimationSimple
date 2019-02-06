@@ -44,7 +44,7 @@ public class AnimatorHandler {
                 }
             }
             if (animatorList.isEmpty() && animationTerminatedListener != null) {
-                animationTerminatedListener.onAnimationEnd();
+                animationTerminatedListener.onAnimationsEnd();
             }
         }
     }

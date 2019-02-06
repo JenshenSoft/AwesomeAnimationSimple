@@ -77,7 +77,7 @@ public class AnimatorCounterCallbackDelegator extends AnimatorCallbackDelegator 
 
     @Override
     public void onAnimationEnd(Animator animation) {
-        Log.d(TAG, "onAnimationEnd " + countEnd);
+        Log.d(TAG, "onAnimationsEnd " + countEnd);
         countEnd++;
         if (countEnd == animationsCount) {
             super.onAnimationEnd(animation);
