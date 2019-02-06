@@ -2,6 +2,7 @@ package com.jenshen.awesomeanimation.util.animator;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
@@ -11,12 +12,21 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class AnimatorHandler {
 
     private static final String TAG = "AwesomeAnimation: " + AnimatorHandler.class.getSimpleName();
+    @Nullable
+    private final AnimationTerminatedListener animationTerminatedListener;
 
     private List<AnimatorWrapper> animatorList;
     private boolean onPause;
     private boolean onDestroyed;
-
     private AnimatorListenerAdapter animatorListenerAdapter;
+
+    public AnimatorHandler() {
+        this(null);
+    }
+
+    public AnimatorHandler(@Nullable AnimationTerminatedListener animationTerminatedListener) {
+        this.animationTerminatedListener = animationTerminatedListener;
+    }
 
     public void addAnimator(final Animator animator) {
         final List<AnimatorWrapper> animators = createListAnimatorsInNeeded();
@@ -32,6 +42,9 @@ public class AnimatorHandler {
                     animatorList.remove(animatorWrapper);
                     return;
                 }
+            }
+            if (animatorList.isEmpty() && animationTerminatedListener != null) {
+                animationTerminatedListener.onAnimationEnd();
             }
         }
     }
