@@ -40,7 +40,7 @@ public class AnimatorHandler {
                 if (AnimatorUtil.equalsAnimators(animatorWrapper.getAnimator(), animator)) {
                     animatorWrapper.clear();
                     animatorList.remove(animatorWrapper);
-                    return;
+                    break;
                 }
             }
             if (animatorList.isEmpty() && animationTerminatedListener != null) {
